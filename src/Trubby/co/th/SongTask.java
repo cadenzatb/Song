@@ -14,6 +14,7 @@ public class SongTask extends BukkitRunnable{
 	int count;
 	
 	public ArrayList<String> soprano = new ArrayList<>();
+	public ArrayList<String> alto = new ArrayList<>();
 	public ArrayList<String> bass = new ArrayList<>();
 	
 	public SongTask(World world, Location loc){
@@ -21,63 +22,127 @@ public class SongTask extends BukkitRunnable{
 		this.world = world;
 		this.count = 0;
 		
-		soprano.add("E b");	// ------------- 1
+		/**
+		 * SOPRANO
+		 */
+		soprano.add("E");	// ------------- 1
 		soprano.add("");
 		soprano.add("");
 		soprano.add("");
-		soprano.add("b g#");
+		soprano.add("b");
 		soprano.add("");
-		soprano.add("C a");
+		soprano.add("C");
 		soprano.add("");
-		soprano.add("D b");	// ------------- 2
+		soprano.add("D");	// ------------- 2
 		soprano.add("");
 		soprano.add("E");	
 		soprano.add("D");
-		soprano.add("C a");
+		soprano.add("C");
 		soprano.add("");
-		soprano.add("b g#");
+		soprano.add("b");
 		soprano.add("");
-		soprano.add("a e");	// ------------- 3
-		soprano.add("");
-		soprano.add("");	
-		soprano.add("");
-		soprano.add("a e");
-		soprano.add("");
-		soprano.add("C a");
-		soprano.add("");
-		soprano.add("E C");	// ------------- 4
+		soprano.add("a");	// ------------- 3
 		soprano.add("");
 		soprano.add("");	
 		soprano.add("");
-		soprano.add("D b");
+		soprano.add("a");
 		soprano.add("");
-		soprano.add("C a");
+		soprano.add("C");
 		soprano.add("");
-		soprano.add("b g#");	// ------------- 5
+		soprano.add("E");	// ------------- 4
+		soprano.add("");
+		soprano.add("");	
+		soprano.add("");
+		soprano.add("D");
+		soprano.add("");
+		soprano.add("C");
+		soprano.add("");
+		soprano.add("b");	// ------------- 5
 		soprano.add("");
 		soprano.add("");	
 		soprano.add("");
 		soprano.add("b");
 		soprano.add("");
-		soprano.add("C a");
+		soprano.add("C");
 		soprano.add("");
-		soprano.add("D b");	// ------------- 6
-		soprano.add("");
-		soprano.add("");	
-		soprano.add("");
-		soprano.add("E C");
-		soprano.add("");
-		soprano.add("");
-		soprano.add("");
-		soprano.add("C a");	// ------------- 7
+		soprano.add("D");	// ------------- 6
 		soprano.add("");
 		soprano.add("");	
 		soprano.add("");
-		soprano.add("a e");
+		soprano.add("E");
 		soprano.add("");
 		soprano.add("");
 		soprano.add("");
-		soprano.add("a e");	// ------------- 8
+		soprano.add("C");	// ------------- 7
+		soprano.add("");
+		soprano.add("");	
+		soprano.add("");
+		soprano.add("a");
+		soprano.add("");
+		soprano.add("");
+		soprano.add("");
+		soprano.add("a");	// ------------- 8
+		
+		/**
+		 *  ALTO
+		 */
+		alto.add("b");	// ------------- 1
+		alto.add("");
+		alto.add("");
+		alto.add("");
+		alto.add("g#");
+		alto.add("");
+		alto.add("a");
+		alto.add("");
+		alto.add("b");	// ------------- 2
+		alto.add("");
+		alto.add("");	
+		alto.add("");
+		alto.add("a");
+		alto.add("");
+		alto.add("g#");
+		alto.add("");
+		alto.add("e");	// ------------- 3
+		alto.add("");
+		alto.add("");	
+		alto.add("");
+		alto.add("e");
+		alto.add("");
+		alto.add("a");
+		alto.add("");
+		alto.add("C");	// ------------- 4
+		alto.add("");
+		alto.add("");	
+		alto.add("");
+		alto.add("b");
+		alto.add("");
+		alto.add("a");
+		alto.add("");
+		alto.add("g#");	// ------------- 5
+		alto.add("");
+		alto.add("");	
+		alto.add("");
+		alto.add("");
+		alto.add("");
+		alto.add("a");
+		alto.add("");
+		alto.add("b");	// ------------- 6
+		alto.add("");
+		alto.add("");	
+		alto.add("");
+		alto.add("C");
+		alto.add("");
+		alto.add("");
+		alto.add("");
+		alto.add("a");	// ------------- 7
+		alto.add("");
+		alto.add("");	
+		alto.add("");
+		alto.add("e");
+		alto.add("");
+		alto.add("");
+		alto.add("");
+		alto.add("e");	// ------------- 8
 		
 		/** 
 		 *  BASS
@@ -147,23 +212,45 @@ public class SongTask extends BukkitRunnable{
 	@Override
 	public void run() {
 		if(count < soprano.size()){
-			String play = soprano.get(count);
-			if(play != ""){
-				//Multiple sound
-				if(play.length() > 1){
-					for(String str : soprano.get(count).split(" ")){
-						world.playSound(loc, Sound.NOTE_PIANO, 1, getPitchFromText(str));
-					}
-					
-				}else{ //Single sound
-					world.playSound(loc, Pitch.getInstrument(play), 1, getPitchFromText(play));
-				}
+			
+			boolean sop = false;
+			boolean alt = false;
+			boolean bas = false;
+			
+			float fsop = 0f;
+			float falt = 0f;
+			float fbas = 0f;
+			
+			// ----------------------
+			String sopranoplay = soprano.get(count);
+			if(sopranoplay != ""){
+				sop = true;
+				fsop = getPitchFromText(sopranoplay);
+			}
+			
+			String altoplay = alto.get(count);
+			if(altoplay != ""){
+				alt = true;
+				falt = getPitchFromText(altoplay);
 			}
 			
 			String bassplay = bass.get(count);
 			if(bassplay != ""){
-				//Only Single sound
-				world.playSound(loc, Sound.NOTE_BASS, 0.3f, getPitchFromText(bassplay));
+				bas = true;
+				fbas = getPitchFromText(bassplay);
+			}
+			
+			// ----------------------
+			if(sop){
+				world.playSound(loc, Sound.NOTE_PIANO, 1, fsop);
+			}
+			
+			if(alt){
+				world.playSound(loc, Sound.NOTE_PIANO, 1, falt);
+			}
+			
+			if(bas){
+				world.playSound(loc, Sound.NOTE_BASS, 0.3f, fbas);
 			}
 			
 			count++;
