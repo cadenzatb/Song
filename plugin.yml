@@ -1,0 +1,7 @@
+name: Song
+author: tub
+main: Trubby.co.th.main
+description: Upgrade!
+version: 1.0
+commands:
+  song:
